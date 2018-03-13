@@ -13,16 +13,28 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var planeDetected: UILabel!
     @IBOutlet weak var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
+    var portalAdded: Bool = true
     override func viewDidLoad() {
         super.viewDidLoad()
         self.sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showFeaturePoints]
         self.configuration.planeDetection = .horizontal
         self.sceneView.session.run(configuration)
         self.sceneView.delegate = self
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        self.sceneView.addGestureRecognizer(tapGestureRecognizer)
+//        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+//        self.sceneView.addGestureRecognizer(tapGestureRecognizer)
+        self.registerGestureRecognizers()
         
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    func registerGestureRecognizers() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        //let pinchGestureRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(pinch))
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handlePress))
+        longPressGestureRecognizer.minimumPressDuration = 0.1
+        self.sceneView.addGestureRecognizer(longPressGestureRecognizer)
+        //self.sceneView.addGestureRecognizer(pinchGestureRecognizer)
+        self.sceneView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -31,27 +43,47 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
         if !hitTestResult.isEmpty {
             self.addPortal(hitTestResult: hitTestResult.first!)
-        } else {
-            ////
+        }
+    }
+    
+    @objc func handlePress(sender: UILongPressGestureRecognizer) {
+        let sceneView = sender.view as! ARSCNView
+        let holdLocation = sender.location(in: sceneView)
+        let hitTest = sceneView.hitTest(holdLocation)
+        if !hitTest.isEmpty {
+            let result = hitTest.first!
+            let node = result.node
+            print (node.name)
+            if sender.state == .began {
+                let rotation = SCNAction.rotateBy(x: 0, y: CGFloat(360.degreesToRadians), z: 0, duration: 1)
+                let forever = SCNAction.repeatForever(rotation)
+                result.node.runAction(forever)
+            } else if sender.state == .ended {
+                result.node.removeAllActions()
+                node.removeFromParentNode()
+            }
         }
     }
     
     func addPortal(hitTestResult: ARHitTestResult) {
-        let portalScene = SCNScene(named: "art.scnassets/Portal.scn")
-        let portalNode = portalScene!.rootNode.childNode(withName: "Portal", recursively: false)!
-        let transform = hitTestResult.worldTransform
-        let planeXposition = transform.columns.3.x
-        let planeYposition = transform.columns.3.y
-        let planeZposition = transform.columns.3.z
-        portalNode.position =  SCNVector3(planeXposition, planeYposition, planeZposition)
-        self.sceneView.scene.rootNode.addChildNode(portalNode)
-//        self.addPlane(nodeName: "roof", portalNode: portalNode, imageName: "top")
-//        self.addPlane(nodeName: "floor", portalNode: portalNode, imageName: "bottom")
-//        self.addWalls(nodeName: "backWall", portalNode: portalNode, imageName: "back")
-//        self.addWalls(nodeName: "sideWallA", portalNode: portalNode, imageName: "sideA")
-//        self.addWalls(nodeName: "sideWallB", portalNode: portalNode, imageName: "sideB")
-//        self.addWalls(nodeName: "sideDoorA", portalNode: portalNode, imageName: "sideDoorA")
-//        self.addWalls(nodeName: "sideDoorB", portalNode: portalNode, imageName: "sideDoorB")
+        if portalAdded {
+            portalAdded = false
+            let portalScene = SCNScene(named: "art.scnassets/Portal.scn")
+            let portalNode = portalScene!.rootNode.childNode(withName: "Portal", recursively: false)!
+            let transform = hitTestResult.worldTransform
+            let planeXposition = transform.columns.3.x
+            let planeYposition = transform.columns.3.y
+            let planeZposition = transform.columns.3.z
+            portalNode.position =  SCNVector3(planeXposition, planeYposition, planeZposition)
+            self.sceneView.scene.rootNode.addChildNode(portalNode)
+    //        self.addPlane(nodeName: "roof", portalNode: portalNode, imageName: "top")
+    //        self.addPlane(nodeName: "floor", portalNode: portalNode, imageName: "bottom")
+    //        self.addWalls(nodeName: "backWall", portalNode: portalNode, imageName: "back")
+    //        self.addWalls(nodeName: "sideWallA", portalNode: portalNode, imageName: "sideA")
+    //        self.addWalls(nodeName: "sideWallB", portalNode: portalNode, imageName: "sideB")
+    //        self.addWalls(nodeName: "sideDoorA", portalNode: portalNode, imageName: "sideDoorA")
+    //        self.addWalls(nodeName: "sideDoorB", portalNode: portalNode, imageName: "sideDoorB")
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -86,5 +118,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         child?.renderingOrder = 200
     }
     
+}
+
+extension Int {
+    var degreesToRadians: Double { return Double(self) * .pi/180}
 }
 

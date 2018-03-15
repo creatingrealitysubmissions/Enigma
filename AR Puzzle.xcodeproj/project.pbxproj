@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07A974882059A59300C4D1E3 /* Fire.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 07A974862059A59300C4D1E3 /* Fire.scnp */; };
 		17D9AC4F20586BFD00D6EDEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D9AC4E20586BFD00D6EDEA /* AppDelegate.swift */; };
 		17D9AC5120586BFD00D6EDEA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D9AC5020586BFD00D6EDEA /* ViewController.swift */; };
 		17D9AC5420586BFD00D6EDEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17D9AC5220586BFD00D6EDEA /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07A974862059A59300C4D1E3 /* Fire.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; name = Fire.scnp; path = art.scnassets/Fire.scnp; sourceTree = "<group>"; };
 		17D9AC4B20586BFD00D6EDEA /* AR Puzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AR Puzzle.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		17D9AC4E20586BFD00D6EDEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		17D9AC5020586BFD00D6EDEA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				17D9AC6020586C9C00D6EDEA /* art.scnassets */,
 				17D9AC5720586BFD00D6EDEA /* LaunchScreen.storyboard */,
 				17D9AC5A20586BFD00D6EDEA /* Info.plist */,
+				07A974862059A59300C4D1E3 /* Fire.scnp */,
 			);
 			path = "AR Puzzle";
 			sourceTree = "<group>";
@@ -129,6 +132,7 @@
 				17D9AC5920586BFD00D6EDEA /* LaunchScreen.storyboard in Resources */,
 				17D9AC6120586C9C00D6EDEA /* art.scnassets in Resources */,
 				17D9AC5620586BFD00D6EDEA /* Assets.xcassets in Resources */,
+				07A974882059A59300C4D1E3 /* Fire.scnp in Resources */,
 				17D9AC5420586BFD00D6EDEA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
